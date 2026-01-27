@@ -1,0 +1,25 @@
+_target_: "src.model.encoder.backbone.backbone_vit.backbone_dino.DinoV2BackboneConfig"
+name: "dinov2"
+type: "vits"
+embed_dim: 384
+dino:
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+lora: 
+  r: 8
+  lora_alpha: 8
+  target_modules:
+    - "qkv"
+    - "proj"
+  lora_dropout: 0.1
+  bias: "none"
+student:
+  arch: "vits"
+  patch_size: 14
+  student_temp: 1.
+teacher:
+  momentum_teacher: 0.996
+  final_momentum_teacher: 1.0
+  teacher_temp: 1.

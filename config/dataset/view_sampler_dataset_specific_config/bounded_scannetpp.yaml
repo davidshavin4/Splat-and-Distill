@@ -1,0 +1,12 @@
+# @package _global_
+
+dataset:
+  view_sampler:
+    min_distance_between_context_views: 8
+    max_distance_between_context_views: 12
+    min_distance_to_context_views: 0
+    warm_up_steps: 0
+    initial_min_distance_between_context_views: 0 # Not used
+    initial_max_distance_between_context_views: 0 # Not used
+    num_target_views: 1
+    num_context_views: 2
