@@ -1,74 +1,67 @@
-/* Carousel Wrapper */
-.carousel-wrapper {
-  position: relative;
-  width: 100%;
-  margin-top: 20px;
-  padding-bottom: 20px;
+:root {
+  --primary-color: #2c3e50; /* Deep Slate */
+  --accent-color: #d4af37; /* Gold/Bronze */
+  --bg-light: #fdfdfd;
 }
 
-/* Scrollable Container */
-.carousel-content {
-  display: flex;
-  overflow-x: auto; /* Enables horizontal scrolling */
-  gap: 20px;
-  padding: 20px 0;
-  scroll-snap-type: x mandatory; /* Makes it "snap" to each video */
-  scrollbar-width: thin; /* Clean scrollbar for Firefox */
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg-light);
+  color: #333;
 }
 
-/* Individual Video Cards */
-.carousel-item {
-  flex: 0 0 45%; /* Shows nearly 2 videos at a time */
-  min-width: 300px;
-  scroll-snap-align: start;
-  background: #fff;
-  border-radius: 15px; /* Rounded corners like image_7b40b7.jpg */
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+.publication-title {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  color: var(--primary-color);
 }
 
-.carousel-item:hover {
-  transform: translateY(-5px);
+.accent-text {
+  color: var(--accent-color);
 }
 
-.carousel-item video {
-  width: 100%;
-  display: block;
+.publication-authors a {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.publication-authors a:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+.publication-venue {
+  color: #666;
+  font-variant: small-caps;
+  letter-spacing: 1px;
+}
+
+.hero.is-light {
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
 
-.video-label {
-  padding: 10px;
-  margin: 0;
-  font-weight: bold;
-  font-size: 0.9rem;
-  color: var(--primary);
-  background: #fafafa;
+/* Slider Customization */
+.results-carousel .item {
+  margin: 5px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Dots at the bottom */
-.carousel-dots {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 20px;
+video {
+  display: block;
 }
 
-.carousel-dots span {
-  width: 10px;
-  height: 10px;
-  background: #ddd;
-  border-radius: 50%;
+.section h2.title {
+  border-bottom: 2px solid var(--accent-color);
+  display: inline-block;
+  padding-bottom: 5px;
+  margin-bottom: 30px;
 }
 
-.carousel-dots span:first-child {
-  background: var(--accent);
-} /* Active dot color */
-
-/* Mobile view: Show 1 video at a time */
-@media (max-width: 768px) {
-  .carousel-item {
-    flex: 0 0 85%;
-  }
+pre {
+  background-color: #f8f8f8;
+  border-left: 5px solid var(--accent-color);
 }

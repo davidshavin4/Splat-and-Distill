@@ -1,65 +1,271 @@
-<section class="results">
-  <h2>Feature Consistency Analysis (PCA)</h2>
-  <hr />
-  <p class="section-description">
-    Browse through our PCA visualizations across different scenes. Consistent
-    coloring across frames indicates stable semantic feature representation.
-  </p>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="description"
+      content="Splat and Distill: Augmenting Teachers with Feed-Forward 3D Reconstruction For 3D-Aware Distillation"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Splat and Distill</title>
 
-  <div class="carousel-wrapper">
-    <div class="carousel-content">
-      <div class="carousel-item">
-        <video controls loop muted playsinline>
-          <source src="videos/bicycle_pca.mp4" type="video/mp4" />
-        </video>
-        <p class="video-label">Bicycle Scene</p>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container is-max-desktop has-text-centered">
+          <h1 class="title is-1 publication-title">
+            Splat and Distill:
+            <span class="accent-text"
+              >Augmenting Teachers with Feed-Forward 3D Reconstruction For
+              3D-Aware Distillation</span
+            >
+          </h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://davidshavin4.github.io/" target="_blank"
+                >David Shavin</a
+              >,
+            </span>
+            <span class="author-block">
+              <a href="https://sagiebenaim.github.io/" target="_blank"
+                >Sagie Benaim</a
+              >
+            </span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"
+              >The Hebrew University of Jerusalem, Israel</span
+            >
+          </div>
+          <div class="column has-text-centered">
+            <div class="publication-venue">
+              <strong>ICLR 2026</strong>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="carousel-item">
-        <video controls loop muted playsinline>
-          <source src="videos/dance_pca.mp4" type="video/mp4" />
-        </video>
-        <p class="video-label">Dance Performance</p>
-      </div>
-      <div class="carousel-item">
-        <video controls loop muted playsinline>
-          <source src="videos/dogs_pca.mp4" type="video/mp4" />
-        </video>
-        <p class="video-label">Dogs in Park</p>
-      </div>
-      <div class="carousel-item">
-        <video controls loop muted playsinline>
-          <source src="videos/office_pca.mp4" type="video/mp4" />
-        </video>
-        <p class="video-label">Office Environment</p>
-      </div>
-      <div class="carousel-item">
-        <video controls loop muted playsinline>
-          <source src="videos/scene1_pca.mp4" type="video/mp4" />
-        </video>
-        <p class="video-label">Analysis: Scene 1</p>
-      </div>
-      <div class="carousel-item">
-        <video controls loop muted playsinline>
-          <source src="videos/scene2_pca.mp4" type="video/mp4" />
-        </video>
-        <p class="video-label">Analysis: Scene 2</p>
-      </div>
-      <div class="carousel-item">
-        <video controls loop muted playsinline>
-          <source src="videos/scene3_pca.mp4" type="video/mp4" />
-        </video>
-        <p class="video-label">Analysis: Scene 3</p>
-      </div>
-      <div class="carousel-item">
-        <video controls loop muted playsinline>
-          <source src="videos/scene4_pca.mp4" type="video/mp4" />
-        </video>
-        <p class="video-label">Analysis: Scene 4</p>
-      </div>
-    </div>
+    </section>
 
-    <div class="carousel-dots">
-      <span></span><span></span><span></span><span></span>
-    </div>
-  </div>
-</section>
+    <section class="hero is-light is-small">
+      <div class="hero-body">
+        <div class="container">
+          <div id="results-carousel" class="carousel results-carousel">
+            <div class="item">
+              <video
+                poster=""
+                id="v1"
+                autoplay
+                controls
+                muted
+                loop
+                playsinline
+                height="100%"
+              >
+                <source src="./videos/bicycle_pca.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <div class="item">
+              <video
+                poster=""
+                id="v2"
+                autoplay
+                controls
+                muted
+                loop
+                playsinline
+                height="100%"
+              >
+                <source src="./videos/dance_pca.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <div class="item">
+              <video
+                poster=""
+                id="v3"
+                autoplay
+                controls
+                muted
+                loop
+                playsinline
+                height="100%"
+              >
+                <source src="./videos/dogs_pca.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <div class="item">
+              <video
+                poster=""
+                id="v4"
+                autoplay
+                controls
+                muted
+                loop
+                playsinline
+                height="100%"
+              >
+                <source src="./videos/office_pca.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <div class="item">
+              <video
+                poster=""
+                id="v5"
+                autoplay
+                controls
+                muted
+                loop
+                playsinline
+                height="100%"
+              >
+                <source src="./videos/scene1_pca.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <div class="item">
+              <video
+                poster=""
+                id="v6"
+                autoplay
+                controls
+                muted
+                loop
+                playsinline
+                height="100%"
+              >
+                <source src="./videos/scene2_pca.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <div class="item">
+              <video
+                poster=""
+                id="v7"
+                autoplay
+                controls
+                muted
+                loop
+                playsinline
+                height="100%"
+              >
+                <source src="./videos/scene3_pca.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <div class="item">
+              <video
+                poster=""
+                id="v8"
+                autoplay
+                controls
+                muted
+                loop
+                playsinline
+                height="100%"
+              >
+                <source src="./videos/scene4_pca.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Abstract</h2>
+            <div class="content has-text-justified">
+              <p>
+                In this work, we propose Splat and Distill, a novel framework
+                that...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Method Overview</h2>
+        <div class="columns is-centered">
+          <div class="column is-full-width">
+            <div class="content has-text-centered">
+              <img
+                src="./images/method_diagram.png"
+                alt="Method Diagram"
+                style="width: 100%; max-width: 900px"
+              />
+              <p class="has-text-justified">
+                Our method first lifts 2D features into a 3D Gaussian
+                representation...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
+        <div class="content has-text-centered">
+          <img
+            src="./images/results_table.png"
+            alt="Results"
+            style="width: 80%"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="BibTeX">
+      <div class="container is-max-desktop content">
+        <h2 class="title">BibTeX</h2>
+        <pre><code>@inproceedings{shavin2026splat,
+  title={Splat and Distill: Augmenting Teachers with Feed-Forward 3D Reconstruction For 3D-Aware Distillation},
+  author={Shavin, David and Benaim, Sagie},
+  booktitle={ICLR},
+  year={2026}
+}</code></pre>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <p>
+            Website template modified from
+            <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        var carousels = bulmaCarousel.attach(".carousel", {
+          slidesToScroll: 1,
+          slidesToShow: 2,
+          infinite: true,
+          autoplay: true,
+          autoplaySpeed: 5000,
+        });
+      });
+    </script>
+  </body>
+</html>
