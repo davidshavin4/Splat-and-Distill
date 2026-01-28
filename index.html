@@ -1,35 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DINOv2 Feature Extraction Research</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <header>
-        <h1>DINOv2 Feature Analysis: Vanilla vs. Finetuned</h1>
-        <p class="authors">Your Name, Research Partner Name</p>
-    </header>
+<section class="results">
+  <h2>Feature Consistency Analysis (PCA)</h2>
+  <hr />
+  <p class="section-description">
+    We visualize the learned DINOv2 features by projecting the high-dimensional
+    descriptors into the top 3 principal components (RGB). Consistent coloring
+    across frames indicates stable semantic feature representation.
+  </p>
 
-    <section id="abstract">
-        <h2>Abstract</h2>
-        <p>Your abstract goes here. Explain how you used PCA and K-Means to visualize feature consistency...</p>
-    </section>
+  <div class="video-grid">
+    <div class="grid-card">
+      <h3>Bicycle Scene</h3>
+      <video controls loop muted playsinline>
+        <source src="videos/bicycle_pca.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="grid-card">
+      <h3>Dance Performance</h3>
+      <video controls loop muted playsinline>
+        <source src="videos/dance_pca.mp4" type="video/mp4" />
+      </video>
+    </div>
 
-    <section id="demo">
-        <h2>Feature Visualization Demo</h2>
-        <div class="video-container">
-            <h3>Shared-Basis Comparison (Original | PCA | K-Means)</h3>
-            <video controls width="100%">
-                <source src="videos/scene1_pca.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-    </section>
+    <div class="grid-card">
+      <h3>Dogs in Park</h3>
+      <video controls loop muted playsinline>
+        <source src="videos/dogs_pca.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="grid-card">
+      <h3>Office Environment</h3>
+      <video controls loop muted playsinline>
+        <source src="videos/office_pca.mp4" type="video/mp4" />
+      </video>
+    </div>
 
-    <footer>
-        <p>Media used for extraction demos provided by Pixabay under the Pixabay Content License.</p>
-    </footer>
-</body>
-</html>
+    <div class="grid-card">
+      <h3>Analysis: Scene 1</h3>
+      <video controls loop muted playsinline>
+        <source src="videos/scene1_pca.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="grid-card">
+      <h3>Analysis: Scene 2</h3>
+      <video controls loop muted playsinline>
+        <source src="videos/scene2_pca.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <div class="grid-card">
+      <h3>Analysis: Scene 3</h3>
+      <video controls loop muted playsinline>
+        <source src="videos/scene3_pca.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="grid-card">
+      <h3>Analysis: Scene 4</h3>
+      <video controls loop muted playsinline>
+        <source src="videos/scene4_pca.mp4" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+</section>
