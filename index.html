@@ -2,62 +2,64 @@
   <h2>Feature Consistency Analysis (PCA)</h2>
   <hr />
   <p class="section-description">
-    We visualize the learned DINOv2 features by projecting the high-dimensional
-    descriptors into the top 3 principal components (RGB). Consistent coloring
-    across frames indicates stable semantic feature representation.
+    Browse through our PCA visualizations across different scenes. Consistent
+    coloring across frames indicates stable semantic feature representation.
   </p>
 
-  <div class="video-grid">
-    <div class="grid-card">
-      <h3>Bicycle Scene</h3>
-      <video controls loop muted playsinline>
-        <source src="videos/bicycle_pca.mp4" type="video/mp4" />
-      </video>
-    </div>
-    <div class="grid-card">
-      <h3>Dance Performance</h3>
-      <video controls loop muted playsinline>
-        <source src="videos/dance_pca.mp4" type="video/mp4" />
-      </video>
+  <div class="carousel-wrapper">
+    <div class="carousel-content">
+      <div class="carousel-item">
+        <video controls loop muted playsinline>
+          <source src="videos/bicycle_pca.mp4" type="video/mp4" />
+        </video>
+        <p class="video-label">Bicycle Scene</p>
+      </div>
+      <div class="carousel-item">
+        <video controls loop muted playsinline>
+          <source src="videos/dance_pca.mp4" type="video/mp4" />
+        </video>
+        <p class="video-label">Dance Performance</p>
+      </div>
+      <div class="carousel-item">
+        <video controls loop muted playsinline>
+          <source src="videos/dogs_pca.mp4" type="video/mp4" />
+        </video>
+        <p class="video-label">Dogs in Park</p>
+      </div>
+      <div class="carousel-item">
+        <video controls loop muted playsinline>
+          <source src="videos/office_pca.mp4" type="video/mp4" />
+        </video>
+        <p class="video-label">Office Environment</p>
+      </div>
+      <div class="carousel-item">
+        <video controls loop muted playsinline>
+          <source src="videos/scene1_pca.mp4" type="video/mp4" />
+        </video>
+        <p class="video-label">Analysis: Scene 1</p>
+      </div>
+      <div class="carousel-item">
+        <video controls loop muted playsinline>
+          <source src="videos/scene2_pca.mp4" type="video/mp4" />
+        </video>
+        <p class="video-label">Analysis: Scene 2</p>
+      </div>
+      <div class="carousel-item">
+        <video controls loop muted playsinline>
+          <source src="videos/scene3_pca.mp4" type="video/mp4" />
+        </video>
+        <p class="video-label">Analysis: Scene 3</p>
+      </div>
+      <div class="carousel-item">
+        <video controls loop muted playsinline>
+          <source src="videos/scene4_pca.mp4" type="video/mp4" />
+        </video>
+        <p class="video-label">Analysis: Scene 4</p>
+      </div>
     </div>
 
-    <div class="grid-card">
-      <h3>Dogs in Park</h3>
-      <video controls loop muted playsinline>
-        <source src="videos/dogs_pca.mp4" type="video/mp4" />
-      </video>
-    </div>
-    <div class="grid-card">
-      <h3>Office Environment</h3>
-      <video controls loop muted playsinline>
-        <source src="videos/office_pca.mp4" type="video/mp4" />
-      </video>
-    </div>
-
-    <div class="grid-card">
-      <h3>Analysis: Scene 1</h3>
-      <video controls loop muted playsinline>
-        <source src="videos/scene1_pca.mp4" type="video/mp4" />
-      </video>
-    </div>
-    <div class="grid-card">
-      <h3>Analysis: Scene 2</h3>
-      <video controls loop muted playsinline>
-        <source src="videos/scene2_pca.mp4" type="video/mp4" />
-      </video>
-    </div>
-
-    <div class="grid-card">
-      <h3>Analysis: Scene 3</h3>
-      <video controls loop muted playsinline>
-        <source src="videos/scene3_pca.mp4" type="video/mp4" />
-      </video>
-    </div>
-    <div class="grid-card">
-      <h3>Analysis: Scene 4</h3>
-      <video controls loop muted playsinline>
-        <source src="videos/scene4_pca.mp4" type="video/mp4" />
-      </video>
+    <div class="carousel-dots">
+      <span></span><span></span><span></span><span></span>
     </div>
   </div>
 </section>

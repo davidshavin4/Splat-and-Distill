@@ -1,42 +1,74 @@
-/* Video Grid Styling */
-.section-description {
-  text-align: center;
-  max-width: 700px;
-  margin: 0 auto 40px auto;
-  color: #666;
+/* Carousel Wrapper */
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  margin-top: 20px;
+  padding-bottom: 20px;
 }
 
-.video-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two columns */
-  gap: 30px;
+/* Scrollable Container */
+.carousel-content {
+  display: flex;
+  overflow-x: auto; /* Enables horizontal scrolling */
+  gap: 20px;
+  padding: 20px 0;
+  scroll-snap-type: x mandatory; /* Makes it "snap" to each video */
+  scrollbar-width: thin; /* Clean scrollbar for Firefox */
+}
+
+/* Individual Video Cards */
+.carousel-item {
+  flex: 0 0 45%; /* Shows nearly 2 videos at a time */
+  min-width: 300px;
+  scroll-snap-align: start;
+  background: #fff;
+  border-radius: 15px; /* Rounded corners like image_7b40b7.jpg */
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.carousel-item:hover {
+  transform: translateY(-5px);
+}
+
+.carousel-item video {
+  width: 100%;
+  display: block;
+  border-bottom: 1px solid #eee;
+}
+
+.video-label {
+  padding: 10px;
+  margin: 0;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--primary);
+  background: #fafafa;
+}
+
+/* Dots at the bottom */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
   margin-top: 20px;
 }
 
-.grid-card {
-  background: #fff;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  text-align: center;
+.carousel-dots span {
+  width: 10px;
+  height: 10px;
+  background: #ddd;
+  border-radius: 50%;
 }
 
-.grid-card h3 {
-  font-size: 1.1rem;
-  margin-bottom: 12px;
-  color: var(--primary);
-}
+.carousel-dots span:first-child {
+  background: var(--accent);
+} /* Active dot color */
 
-.grid-card video {
-  width: 100%;
-  border-radius: 6px;
-  display: block;
-}
-
-/* Responsive adjustment for phones */
+/* Mobile view: Show 1 video at a time */
 @media (max-width: 768px) {
-  .video-grid {
-    grid-template-columns: 1fr; /* Single column on small screens */
+  .carousel-item {
+    flex: 0 0 85%;
   }
 }
