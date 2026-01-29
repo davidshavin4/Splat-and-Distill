@@ -1,0 +1,189 @@
+/* General Layout - Centered and professional look */
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap");
+
+body {
+  font-family: "Ubuntu", sans-serif;
+  background-color: #fcfcfc;
+  font-size: 0.92rem;
+  color: #4a4a4a;
+  line-height: 1.6;
+}
+
+.container.is-max-desktop {
+  max-width: 960px !important;
+  margin: 0 auto;
+}
+
+/* Title and Section Styling */
+.publication-title {
+  color: #000000 !important;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  line-height: 1.2;
+}
+
+.section-title {
+  margin-bottom: 1.2rem !important;
+  font-weight: 600;
+}
+
+/* Button / Link Styles */
+.link-block a {
+  margin: 0 5px;
+  border-radius: 25px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* --- THE FIX: Carousel 1-Video Display --- */
+/* Forces each carousel item to take up exactly 100% of the container width */
+.results-carousel .item {
+  width: 100% !important;
+  flex: 0 0 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  padding: 0 !important; /* Remove side padding that reveals other videos */
+}
+
+.carousel .item video {
+  display: block;
+  width: 100%;
+  max-width: 900px; /* Limits video width for better aesthetics on ultra-wide screens */
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Fixes the carousel inner-wrapper behavior to prevent multiple items showing */
+.carousel .carousel-container {
+  overflow: hidden !important;
+}
+
+/* Method Overview Image */
+.method-image,
+.publication-image img {
+  margin: 1.5rem auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Color Coding for Method Overview - Cleaned and bold for emphasis */
+.color-red {
+  color: #ff0000;
+  font-weight: 600;
+}
+.color-darkblue {
+  color: #00008b;
+  font-weight: 600;
+}
+.color-purple {
+  color: #800080;
+  font-weight: 600;
+}
+.color-toiletbrown {
+  color: #8b4513;
+  font-weight: 600;
+}
+.color-cerulean {
+  color: #007ba7;
+  font-weight: 600;
+}
+.color-mulberry {
+  color: #c54b8c;
+  font-weight: 600;
+}
+.color-blue {
+  color: #0000ff;
+  font-weight: 600;
+}
+.color-teal {
+  color: #008080;
+  font-weight: 600;
+}
+.color-olive {
+  color: #808000;
+  font-weight: 600;
+}
+.color-leafgreen {
+  color: #32cd32;
+  font-weight: 600;
+}
+.color-gray {
+  color: #808080;
+  font-weight: 600;
+}
+.color-bodypink {
+  color: #ffb6c1;
+  font-weight: 600;
+}
+
+/* Mathematical typography - Improved for HTML alignment */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+
+/* BibTeX and Footer */
+.footer {
+  padding: 3rem 1.5rem;
+  background-color: #f5f5f5;
+  font-size: 0.85rem;
+}
+
+pre {
+  background: #f1f5f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  border: 1px solid #e2e8f0;
+}
+
+/* Scroll to top button visibility */
+.scroll-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.scroll-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- Final 1-Video Carousel Force --- */
+
+/* Ensures the carousel wrapper only shows one item area */
+.results-carousel {
+  display: block !important;
+  width: 100% !important;
+  max-width: 900px !important; /* Adjust based on your preferred video size */
+  margin: 0 auto !important;
+  overflow: hidden !important;
+}
+
+/* Forces every individual item to take up the full container width */
+.results-carousel .item {
+  width: 100% !important;
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Fix for the internal slider track that often defaults to 'flex' */
+.carousel .carousel-container .carousel-item {
+  width: 100% !important;
+}

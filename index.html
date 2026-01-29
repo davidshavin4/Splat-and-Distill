@@ -1,271 +1,400 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="description"
-      content="Splat and Distill: Augmenting Teachers with Feed-Forward 3D Reconstruction For 3D-Aware Distillation"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Splat and Distill</title>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="title" content="Splat and Distill: Augmenting Teachers with Feed-Forward 3D Reconstruction For 3D-Aware Distillation">
+  <meta name="description" content="Splat and Distill instills 3D awareness into 2D VFMs by lifting features into 3D Gaussians and splatting views, boosting geometric and semantic representation.">
+  <meta name="keywords" content="Splat and Distill, 3D Gaussian Splatting, Vision Foundation Models (VFMs), Knowledge Distillation, 3D-Aware Features, Feed-forward 3D Reconstruction, Monocular Depth Estimation, Surface Normal Estimation, Multi-view Correspondence, Semantic Segmentation, DINOv2">
+  <meta name="author" content="David Shavin, Sagie Benaim">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Hebrew University of Jerusalem">
+  <meta property="og:title" content="Splat and Distill: 3D-Aware Distillation">
+  <meta property="og:description" content="Lifting 2D features into 3D Gaussians for better geometric and semantic awareness.">
+  <meta property="og:url" content="https://davidshavin4.github.io/Splat-and-Distill">
+  <meta property="og:image" content="https://davidshavin4.github.io/Splat-and-Distill/static/images/social_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2025-02-20T00:00:00.000Z">
+  <meta property="article:author" content="David Shavin">
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css"
-    />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <section class="hero">
-      <div class="hero-body">
-        <div class="container is-max-desktop has-text-centered">
-          <h1 class="title is-1 publication-title">
-            Splat and Distill:
-            <span class="accent-text"
-              >Augmenting Teachers with Feed-Forward 3D Reconstruction For
-              3D-Aware Distillation</span
-            >
-          </h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://davidshavin4.github.io/" target="_blank"
-                >David Shavin</a
-              >,
-            </span>
-            <span class="author-block">
-              <a href="https://sagiebenaim.github.io/" target="_blank"
-                >Sagie Benaim</a
-              >
-            </span>
-          </div>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"
-              >The Hebrew University of Jerusalem, Israel</span
-            >
-          </div>
-          <div class="column has-text-centered">
-            <div class="publication-venue">
-              <strong>ICLR 2026</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@HebrewU">
+  <meta name="twitter:creator" content="@davidshavin4">
+  <meta name="twitter:title" content="Splat and Distill: 3D-Aware Distillation">
+  <meta name="twitter:description" content="Instilling 3D awareness into VFMs via feed-forward Gaussian Splatting.">
+  <meta name="twitter:image" content="https://davidshavin4.github.io/Splat-and-Distill/static/images/social_preview.png">
 
-    <section class="hero is-light is-small">
-      <div class="hero-body">
-        <div class="container">
-          <div id="results-carousel" class="carousel results-carousel">
-            <div class="item">
-              <video
-                poster=""
-                id="v1"
-                autoplay
-                controls
-                muted
-                loop
-                playsinline
-                height="100%"
-              >
-                <source src="./videos/bicycle_pca.mp4" type="video/mp4" />
-              </video>
-            </div>
-            <div class="item">
-              <video
-                poster=""
-                id="v2"
-                autoplay
-                controls
-                muted
-                loop
-                playsinline
-                height="100%"
-              >
-                <source src="./videos/dance_pca.mp4" type="video/mp4" />
-              </video>
-            </div>
-            <div class="item">
-              <video
-                poster=""
-                id="v3"
-                autoplay
-                controls
-                muted
-                loop
-                playsinline
-                height="100%"
-              >
-                <source src="./videos/dogs_pca.mp4" type="video/mp4" />
-              </video>
-            </div>
-            <div class="item">
-              <video
-                poster=""
-                id="v4"
-                autoplay
-                controls
-                muted
-                loop
-                playsinline
-                height="100%"
-              >
-                <source src="./videos/office_pca.mp4" type="video/mp4" />
-              </video>
-            </div>
-            <div class="item">
-              <video
-                poster=""
-                id="v5"
-                autoplay
-                controls
-                muted
-                loop
-                playsinline
-                height="100%"
-              >
-                <source src="./videos/scene1_pca.mp4" type="video/mp4" />
-              </video>
-            </div>
-            <div class="item">
-              <video
-                poster=""
-                id="v6"
-                autoplay
-                controls
-                muted
-                loop
-                playsinline
-                height="100%"
-              >
-                <source src="./videos/scene2_pca.mp4" type="video/mp4" />
-              </video>
-            </div>
-            <div class="item">
-              <video
-                poster=""
-                id="v7"
-                autoplay
-                controls
-                muted
-                loop
-                playsinline
-                height="100%"
-              >
-                <source src="./videos/scene3_pca.mp4" type="video/mp4" />
-              </video>
-            </div>
-            <div class="item">
-              <video
-                poster=""
-                id="v8"
-                autoplay
-                controls
-                muted
-                loop
-                playsinline
-                height="100%"
-              >
-                <source src="./videos/scene4_pca.mp4" type="video/mp4" />
-              </video>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+  <meta name="citation_title" content="Splat and Distill: Augmenting Teachers with Feed-Forward 3D Reconstruction For 3D-Aware Distillation">
+  <meta name="citation_author" content="Shavin, David">
+  <meta name="citation_author" content="Benaim, Sagie">
+  <meta name="citation_publication_date" content="2025">
+  <meta name="citation_conference_title" content="International Conference on Learning Representations (ICLR)">
+  <meta name="citation_pdf_url" content="https://arxiv.org/pdf/2502.14789.pdf">
+  
+  <meta name="theme-color" content="#2563eb">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <section class="section">
+  <title>Splat and Distill | David Shavin, Sagie Benaim</title>
+  
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "Splat and Distill",
+    "description": "Lifting 2D features into 3D Gaussians for 3D-aware distillation.",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "David Shavin",
+        "affiliation": { "@type": "Organization", "name": "Hebrew University of Jerusalem" }
+      },
+      {
+        "@type": "Person",
+        "name": "Sagie Benaim",
+        "affiliation": { "@type": "Organization", "name": "Hebrew University of Jerusalem" }
+      }
+    ],
+    "datePublished": "2025-02-20",
+    "publisher": { "@type": "Organization", "name": "ICLR" },
+    "url": "https://davidshavin4.github.io/Splat-and-Distill",
+    "image": "https://davidshavin4.github.io/Splat-and-Distill/static/images/social_preview.png"
+  }
+  </script>
+</head>
+<body>
+
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
       <div class="container is-max-desktop">
-        <div class="columns is-centered has-text-centered">
-          <div class="column is-four-fifths">
-            <h2 class="title is-3">Abstract</h2>
-            <div class="content has-text-justified">
-              <p>
-                In this work, we propose Splat and Distill, a novel framework
-                that...
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container is-max-desktop">
-        <h2 class="title is-3 has-text-centered">Method Overview</h2>
         <div class="columns is-centered">
-          <div class="column is-full-width">
-            <div class="content has-text-centered">
-              <img
-                src="./images/method_diagram.png"
-                alt="Method Diagram"
-                style="width: 100%; max-width: 900px"
-              />
-              <p class="has-text-justified">
-                Our method first lifts 2D features into a 3D Gaussian
-                representation...
-              </p>
+          <div class="column has-text-centered">
+            <!-- TODO: Replace with your paper title -->
+            <h1 class="title is-1 publication-title">Splat and Distill: Augmenting Teachers with Feed-Forward 3D Reconstruction For 3D-Aware Distillation</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- TODO: Replace with your paper authors and their personal links -->
+              <span class="author-block">
+                <a href="https://davidshavin4.github.io/" target="_blank">David Shavin</a>,</span>
+                <span class="author-block">
+                  <a href="https://sagiebenaim.github.io/" target="_blank">Sagie Benaim</a></span>                  
+                  </div>
+
+                  <div class="is-size-5 publication-authors">
+                    <!-- TODO: Replace with your institution and conference/journal info -->
+                    <span class="author-block">Hebrew University of Jerusalem<br>ICLR 2026</span>                    
+                  </div>
+
+                  <div class="column has-text-centered">
+                    <div class="publication-links">
+                         <!-- TODO: Update with your arXiv paper ID -->
+                      <span class="link-block">
+                        <a href="https://arxiv.org/pdf/<ARXIV PAPER ID>.pdf" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                    </span>
+
+
+
+                  <!-- TODO: Replace with your GitHub repository URL -->
+                  <span class="link-block">
+                    <a href="https://github.com/davidshavin4/Splat-and-Distill" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- TODO: Update with your arXiv paper ID -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-    <section class="section">
-      <div class="container is-max-desktop">
-        <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
-        <div class="content has-text-centered">
-          <img
-            src="./images/results_table.png"
-            alt="Results"
-            style="width: 80%"
-          />
+
+<section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <div id="teaser-carousel" class="carousel results-carousel">
+          
+          <div class="item item-video1">
+            <video poster="" id="video1" autoplay controls muted loop height="100%" preload="metadata">
+              <source src="static/videos/bicycle_pca.mp4" type="video/mp4">
+            </video>
+          </div>
+  
+          <div class="item item-video2">
+            <video poster="" id="video2" autoplay controls muted loop height="100%" preload="metadata">
+              <source src="static/videos/dance_pca.mp4" type="video/mp4">
+            </video>
+          </div>
+  
+          <div class="item item-video3">
+            <video poster="" id="video3" autoplay controls muted loop height="100%" preload="metadata">
+              <source src="static/videos/dogs_pca.mp4" type="video/mp4">
+            </video>
+          </div>
+  
+          <div class="item item-video4">
+            <video poster="" id="video4" autoplay controls muted loop height="100%" preload="metadata">
+              <source src="static/videos/office_pca.mp4" type="video/mp4">
+            </video>
+          </div>
+  
+          <div class="item item-video5">
+            <video poster="" id="video5" autoplay controls muted loop height="100%" preload="metadata">
+              <source src="static/videos/scene1_pca.mp4" type="video/mp4">
+            </video>
+          </div>
+  
+          <div class="item item-video6">
+            <video poster="" id="video6" autoplay controls muted loop height="100%" preload="metadata">
+              <source src="static/videos/scene2_pca.mp4" type="video/mp4">
+            </video>
+          </div>
+  
+          <div class="item item-video7">
+            <video poster="" id="video7" autoplay controls muted loop height="100%" preload="metadata">
+              <source src="static/videos/scene3_pca.mp4" type="video/mp4">
+            </video>
+          </div>
+  
+          <div class="item item-video8">
+            <video poster="" id="video8" autoplay controls muted loop height="100%" preload="metadata">
+              <source src="static/videos/scene4_pca.mp4" type="video/mp4">
+            </video>
+          </div>
+  
+        </div>
+        <h2 class="subtitle has-text-centered">
+          ------- Visualizing PCA components from multiple videos across various scenes. From left-to-right ------- <br> [ORIGINAL VIDEO] - [DINOv2 FEATURES] - [OUR FEATURES]
+        </h2>
+      </div>
+    </div>
+  </section>
+
+<!-- TL;DR -->
+<section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width has-text-centered">
+          
+          <div class="publication-image">
+            <img src="static/images/teaser.png" alt="Splat and Distill Teaser" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 1.5rem;">
+          </div>
+  
+          <div class="content has-text-justified">
+            <p>
+              <strong>TL;DR:</strong> <em>Splat and Distill</em> is a semi-self-supervised framework designed to instill 3D awareness into Vision Foundation Models (VFMs) like DINOv2 by enforcing geometric consistency. 
+            </p>
+            <p>
+              Our pipeline initializes a student and a teacher model from a pretrained VFM. We utilize feed-forward Gaussian Splatting to reconstruct a 3D scene from context views of a scene, embedding it with 2D features extracted from the teacher. By "lifting" these features into a 3D representation and splatting them onto novel target views, we generate a <strong>"3D aware"</strong> supervisory signal. The student is then trained to predict features that match these projections. Similar to other Self-Supervised Learning (SSL) paradigms, the teacher is adaptively updated via an Exponential Moving Average (EMA) of the student’s weights. We demonstrate that these <strong>fine-tuned features</strong> significantly improve performance on downstream tasks—such as semantic segmentation and depth estimation—across diverse datasets. 
+            </p>            
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+<!-- End TL;DR -->
 
-    <section class="section" id="BibTeX">
-      <div class="container is-max-desktop content">
-        <h2 class="title">BibTeX</h2>
-        <pre><code>@inproceedings{shavin2026splat,
-  title={Splat and Distill: Augmenting Teachers with Feed-Forward 3D Reconstruction For 3D-Aware Distillation},
-  author={Shavin, David and Benaim, Sagie},
-  booktitle={ICLR},
-  year={2026}
-}</code></pre>
-      </div>
-    </section>
-
-    <footer class="footer">
-      <div class="container">
-        <div class="content has-text-centered">
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <!-- TODO: Replace with your paper abstract -->
           <p>
-            Website template modified from
-            <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+            Vision Foundation Models (VFMs) have achieved remarkable success when applied to various downstream 2D tasks. Despite their effectiveness, they often exhibit a critical lack of 3D awareness. To this end, we introduce <strong>Splat and Distill</strong>, a framework that instills robust 3D awareness into 2D VFMs by augmenting the teacher model with a fast, feed-forward 3D reconstruction pipeline. Given 2D features produced by a teacher model, our method first lifts these features into an explicit 3D Gaussian representation, in a feedforward manner. These 3D features are then "splatted" onto novel viewpoints, producing a set of novel 2D feature maps used to supervise the student model, "distilling" geometrically grounded knowledge. By replacing slow per-scene optimization of prior work with our feed-forward lifting approach, our framework avoids feature-averaging artifacts, creating a dynamic learning process where the teacher’s consistency improves alongside that of the student. Our method significantly outperforms prior works, achieving substantial gains in 3D awareness and enhancing the underlying semantic richness of 2D features.
           </p>
         </div>
       </div>
-    </footer>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
-    <script>
-      $(document).ready(function () {
-        var carousels = bulmaCarousel.attach(".carousel", {
-          slidesToScroll: 1,
-          slidesToShow: 2,
-          infinite: true,
-          autoplay: true,
-          autoplaySpeed: 5000,
-        });
-      });
-    </script>
+
+<!-- Method Overview -->
+<section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3 has-text-centered">Method Overview</h2>
+          
+          <div class="publication-image has-text-centered">
+            <img src="static/images/pipeline.png" alt="Method Overview Pipeline" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 2rem;">
+          </div>
+  
+          <div class="content has-text-justified">
+            <p>
+              <strong>Method Overview.</strong> Starting from the LHS, 
+              <span style="color: red;">two context views <b>I</b><sub><i>j</i></sub><sup>ctx</sup></span> 
+              are passed through a teacher network, producing 
+              <span style="color: darkblue;">two low-resolution 2D feature maps <b>F</b><sub><i>j</i></sub><sup>ctx</sup></span>. 
+              Using <span style="color: purple;">corresponding semantic masks</span>, mask-aware upscaling (Sec. 3.1) produces 
+              <span style="color: #8b4513;">2D features <b>F</b><sub><i>j</i></sub><sup>high</sup></span> of the input resolution.
+            </p>
+  
+            <p>
+              In parallel, a pretrained feed-forward 3D reconstruction model predicts 3D Gaussian primitives 
+              <span style="color: #007ba7;">{&mu;<sub><i>j</i></sub>, &Sigma;<sub><i>j</i></sub>, &alpha;<sub><i>j</i></sub>}</span> 
+              using the same context views <b>I</b><sub><i>j</i></sub><sup>ctx</sup> (Sec. 3.2). 
+              The upscaled 2D feature maps, <span style="color: #8b4513;"><b>F</b><sub><i>j</i></sub><sup>high</sup></span>, are then lifted to these 3D Gaussian primitives, using 2D-3D correspondences, yielding a feature-augmented GS scene 
+              <i>G</i><sub><i>j</i></sub> &larr; <span style="color: #007ba7;">{&mu;<sub><i>j</i></sub>, &Sigma;<sub><i>j</i></sub>, &alpha;<sub><i>j</i></sub>}</span> &cup; <span style="color: #c54b8c;">{<b>f</b><sub><i>j</i></sub>}</span> (Sec. 3.1).
+            </p>
+  
+            <p>
+              Next, the scene is splatted to a target viewpoint, producing a <span style="color: blue;">2D feature map</span>, 
+              which is then blended with the <span style="color: teal;">semantic mask of the target view</span>, resulting in 
+              <span style="color: olive;">2D features <b>F</b><sub>blend</sub><sup>tgt</sup></span> (Sec. 3.3). 
+              Concurrently, as shown on the RHS, the <span style="color: #32cd32;">target image <b>I</b><sup>tgt</sup></span> 
+              (corresponding to the rendered viewpoint) is passed through the student network to obtain its 
+              <span style="color: gray;">feature map <b>F</b><sub>s</sub><sup>tgt</sup></span>. 
+              <span style="color: olive;"><b>F</b><sub>blend</sub><sup>tgt</sup></span> is then downscaled (bilinearly) producing 
+              <span style="color: pink;">a lower resolution 2D feature map</span> which is compared to 
+              <span style="color: gray;"><b>F</b><sub>s</sub><sup>tgt</sup></span> to supervise the student via a distillation loss (Sec. 3.4). 
+              The teacher's weights are updated as an EMA of the student's weights. 
+              <i>Note that SnD is finetuned on ScanNet++.</i>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- End Method Overview -->
+
+
+<!-- Results -->
+<section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3 has-text-centered">Qualitative Results</h2>
+          
+          <div class="content has-text-justified">
+            <p>
+              We evaluate our method's ability to enhance the <strong>3D awareness</strong> and <strong>semantic representation</strong> of DINOv2 features through downstream tasks including semantic segmentation, depth estimation, surface normal prediction, and multi-view correspondence. 
+            </p>
+            <p>
+              While fine-tuned solely on indoor <strong>ScanNet++</strong> scenes, our model generalizes effectively to out-of-domain datasets like KITTI, ADE20k, and Pascal VOC. Our approach captures finer structural details and produces cleaner, less noisy results compared to the baseline, maintaining smoothness and consistency across both indoor and outdoor environments.
+            </p>
+          </div>
+          
+          <div class="publication-image has-text-centered">
+            <img src="static/images/results.png" alt="Splat and Distill Qualitative Results Comparison" style="width: 100%; height: auto; border-radius: 8px;">
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- End Results -->
+
+
+
+
+
+
+<!-- Paper poster -->
+<!-- <section class="hero is-small is-light"> -->
+  <!-- <div class="hero-body"> -->
+    <!-- <div class="container"> -->
+      <!-- <h2 class="title">Poster</h2> -->
+
+      <!-- TODO: Replace with your poster PDF -->
+      <!-- <iframe  src="static/pdfs/sample.pdf" width="100%" height="550"> -->
+          <!-- </iframe> -->
+        
+      <!-- </div> -->
+    <!-- </div> -->
+  <!-- </section> -->
+<!--End paper poster -->
+
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@article{YourPaperKey2024,
+  title={Coming soon},
+  author={Coming soon},
+  journal={Coming soon},
+  year={Coming soon},
+  url={Coming soon}
+}</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
   </body>
-</html>
+  </html>
