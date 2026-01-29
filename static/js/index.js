@@ -106,33 +106,25 @@ function setupVideoCarouselAutoplay() {
 
 // 5. INITIALIZATION (The main fix)
 $(document).ready(function () {
-  // CAROUSEL SETTINGS: Forced to 1 slide at a time for all screen sizes
+  // Initialize Bulma Carousel
   var options = {
     slidesToScroll: 1,
-    slidesToShow: 1,
+    slidesToShow: 3, // This will automatically drop to 1 on mobile due to the library logic
     loop: true,
     infinite: true,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    // This forces 1 video even on very wide desktop screens
-    breakpoints: [
-      { changePoint: 480, slidesToShow: 1, slidesToScroll: 1 },
-      { changePoint: 640, slidesToShow: 1, slidesToScroll: 1 },
-      { changePoint: 768, slidesToShow: 1, slidesToScroll: 1 },
-      { changePoint: 1024, slidesToShow: 1, slidesToScroll: 1 },
-      { changePoint: 1216, slidesToShow: 1, slidesToScroll: 1 }, // Added for ultra-wide
-    ],
+    autoplay: false,
+    autoplaySpeed: 3000,
   };
 
-  // Initialize all carousels
-  if (typeof bulmaCarousel !== "undefined") {
-    bulmaCarousel.attach(".carousel", options);
-  }
+  // Initialize all div with carousel class
+  var carousels = bulmaCarousel.attach(".results-carousel", options);
 
-  // SLIDER FIX: Wrap in a check so it doesn't crash if bulmaSlider is missing
-  if (typeof bulmaSlider !== "undefined") {
-    bulmaSlider.attach();
-  }
-
-  setupVideoCarouselAutoplay();
+  // Lazy loading logic: This fixes the "3 videos at once" drift on mobile
+  // It only loads the video source when the carousel is actually ready
+  var carouselVideos = document.querySelectorAll(".carousel-video");
+  carouselVideos.forEach(function (video) {
+    if (video.getAttribute("data-src")) {
+      video.src = video.getAttribute("data-src");
+    }
+  });
 });

@@ -147,71 +147,43 @@
   </div>
 </section>
 
-<section class="hero teaser">
-    <div class="container is-max-desktop">
-      <div class="hero-body" style="padding: 1rem 0;">
-        
-        <div id="teaser-carousel" class="carousel results-carousel" 
-             style="overflow: hidden; width: 100%; min-height: 300px; display: block; position: relative;">
+
+<section class="hero is-light is-small">
+    <div class="hero-body">
+      <div class="container">
+        <div id="results-carousel" class="carousel results-carousel">
           
-          <div class="item" style="width: 100%; display: flex; justify-content: center; align-items: center; flex: 0 0 100%;">
-            <video autoplay controls muted loop playsinline preload="metadata" 
-                   style="width: 100%; max-width: 900px; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-              <source src="static/videos/bicycle_pca.mp4" type="video/mp4">
+          <div class="item item-video1">
+            <video class="carousel-video" id="video1" controls muted loop playsinline height="100%" 
+                   data-src="static/videos/bicycle_pca.mp4" type="video/mp4">
             </video>
           </div>
   
-          <div class="item" style="width: 100%; display: flex; justify-content: center; align-items: center; flex: 0 0 100%;">
-            <video autoplay controls muted loop playsinline preload="metadata" 
-                   style="width: 100%; max-width: 900px; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-              <source src="static/videos/dance_pca.mp4" type="video/mp4">
+          <div class="item item-video2">
+            <video class="carousel-video" id="video2" controls muted loop playsinline height="100%" 
+                   data-src="static/videos/dance_pca.mp4" type="video/mp4">
             </video>
           </div>
   
-          <div class="item" style="width: 100%; display: flex; justify-content: center; align-items: center; flex: 0 0 100%;">
-            <video autoplay controls muted loop playsinline preload="metadata" 
-                   style="width: 100%; max-width: 900px; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-              <source src="static/videos/dogs_pca.mp4" type="video/mp4">
+          <div class="item item-video3">
+            <video class="carousel-video" id="video3" controls muted loop playsinline height="100%" 
+                   data-src="static/videos/dogs_pca.mp4" type="video/mp4">
             </video>
           </div>
   
-          <div class="item" style="width: 100%; display: flex; justify-content: center; align-items: center; flex: 0 0 100%;">
-            <video autoplay controls muted loop playsinline preload="metadata" 
-                   style="width: 100%; max-width: 900px; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-              <source src="static/videos/office_pca.mp4" type="video/mp4">
+          <div class="item item-video4">
+            <video class="carousel-video" id="video4" controls muted loop playsinline height="100%" 
+                   data-src="static/videos/office_pca.mp4" type="video/mp4">
             </video>
           </div>
   
-        </div>
-  
-        <h2 class="subtitle has-text-centered" style="margin-top: 1.5rem; font-size: 1.1rem;">
-          Visualizing PCA components: [ORIGINAL] - [DINOv2] - [OURS]
-        </h2>
-        
+          </div>
       </div>
+      <p style="margin-top: 15px; text-align: center;">
+        Visualizing PCA components: [ORIGINAL] - [DINOv2] - [OURS]
+      </p>
     </div>
   </section>
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (typeof bulmaCarousel !== 'undefined') {
-        bulmaCarousel.attach('#teaser-carousel', {
-          slidesToScroll: 1,
-          slidesToShow: 1, // Strictly 1 video
-          infinite: true,
-          autoplay: true,
-          autoplaySpeed: 5000,
-          breakpoints: [
-            { changePoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } },
-            { changePoint: 768, settings: { slidesToShow: 1, slidesToScroll: 1 } },
-            { changePoint: 1024, settings: { slidesToShow: 1, slidesToScroll: 1 } }
-          ]
-        });
-      }
-    });
-  </script>
-
-  
 <!-- TL;DR -->
 <section class="section">
     <div class="container is-max-desktop">

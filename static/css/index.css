@@ -162,28 +162,33 @@ pre {
   opacity: 1;
   visibility: visible;
 }
-
-/* --- Final 1-Video Carousel Force --- */
-
-/* Ensures the carousel wrapper only shows one item area */
+/* Fix the carousel container from bleeding out of the screen */
 .results-carousel {
-  display: block !important;
-  width: 100% !important;
-  max-width: 900px !important; /* Adjust based on your preferred video size */
-  margin: 0 auto !important;
-  overflow: hidden !important;
+  overflow: hidden;
 }
 
-/* Forces every individual item to take up the full container width */
+.carousel-extra-padding {
+  padding: 0 20px;
+}
+
+/* Force items to align correctly */
 .results-carousel .item {
-  width: 100% !important;
-  flex: 0 0 100% !important;
-  max-width: 100% !important;
-  padding: 0 !important;
-  margin: 0 !important;
+  margin: 5px;
+  overflow: hidden;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+  padding: 0;
+  font-size: 0;
 }
 
-/* Fix for the internal slider track that often defaults to 'flex' */
-.carousel .carousel-container .carousel-item {
-  width: 100% !important;
+.results-carousel video {
+  display: block;
+}
+
+/* On Mobile: Force it to show exactly 1 item and stop drifting */
+@media (max-width: 768px) {
+  .results-carousel .item {
+    margin: 0;
+    width: 100%;
+  }
 }
