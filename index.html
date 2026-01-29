@@ -147,68 +147,71 @@
   </div>
 </section>
 
-
 <section class="hero teaser">
     <div class="container is-max-desktop">
-      <div class="hero-body">
-        <div id="teaser-carousel" class="carousel results-carousel">
+      <div class="hero-body" style="padding: 1rem 0;">
+        
+        <div id="teaser-carousel" class="carousel results-carousel" 
+             style="overflow: hidden; width: 100%; min-height: 300px; display: block; position: relative;">
           
-          <div class="item item-video1">
-            <video poster="" id="video1" autoplay controls muted loop height="100%" preload="metadata">
+          <div class="item" style="width: 100%; display: flex; justify-content: center; align-items: center; flex: 0 0 100%;">
+            <video autoplay controls muted loop playsinline preload="metadata" 
+                   style="width: 100%; max-width: 900px; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
               <source src="static/videos/bicycle_pca.mp4" type="video/mp4">
             </video>
           </div>
   
-          <div class="item item-video2">
-            <video poster="" id="video2" autoplay controls muted loop height="100%" preload="metadata">
+          <div class="item" style="width: 100%; display: flex; justify-content: center; align-items: center; flex: 0 0 100%;">
+            <video autoplay controls muted loop playsinline preload="metadata" 
+                   style="width: 100%; max-width: 900px; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
               <source src="static/videos/dance_pca.mp4" type="video/mp4">
             </video>
           </div>
   
-          <div class="item item-video3">
-            <video poster="" id="video3" autoplay controls muted loop height="100%" preload="metadata">
+          <div class="item" style="width: 100%; display: flex; justify-content: center; align-items: center; flex: 0 0 100%;">
+            <video autoplay controls muted loop playsinline preload="metadata" 
+                   style="width: 100%; max-width: 900px; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
               <source src="static/videos/dogs_pca.mp4" type="video/mp4">
             </video>
           </div>
   
-          <div class="item item-video4">
-            <video poster="" id="video4" autoplay controls muted loop height="100%" preload="metadata">
+          <div class="item" style="width: 100%; display: flex; justify-content: center; align-items: center; flex: 0 0 100%;">
+            <video autoplay controls muted loop playsinline preload="metadata" 
+                   style="width: 100%; max-width: 900px; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
               <source src="static/videos/office_pca.mp4" type="video/mp4">
             </video>
           </div>
   
-          <div class="item item-video5">
-            <video poster="" id="video5" autoplay controls muted loop height="100%" preload="metadata">
-              <source src="static/videos/scene1_pca.mp4" type="video/mp4">
-            </video>
-          </div>
-  
-          <div class="item item-video6">
-            <video poster="" id="video6" autoplay controls muted loop height="100%" preload="metadata">
-              <source src="static/videos/scene2_pca.mp4" type="video/mp4">
-            </video>
-          </div>
-  
-          <div class="item item-video7">
-            <video poster="" id="video7" autoplay controls muted loop height="100%" preload="metadata">
-              <source src="static/videos/scene3_pca.mp4" type="video/mp4">
-            </video>
-          </div>
-  
-          <div class="item item-video8">
-            <video poster="" id="video8" autoplay controls muted loop height="100%" preload="metadata">
-              <source src="static/videos/scene4_pca.mp4" type="video/mp4">
-            </video>
-          </div>
-  
         </div>
-        <h2 class="subtitle has-text-centered">
-          ------- Visualizing PCA components from multiple videos across various scenes. From left-to-right ------- <br> [ORIGINAL VIDEO] - [DINOv2 FEATURES] - [OUR FEATURES]
+  
+        <h2 class="subtitle has-text-centered" style="margin-top: 1.5rem; font-size: 1.1rem;">
+          Visualizing PCA components: [ORIGINAL] - [DINOv2] - [OURS]
         </h2>
+        
       </div>
     </div>
   </section>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof bulmaCarousel !== 'undefined') {
+        bulmaCarousel.attach('#teaser-carousel', {
+          slidesToScroll: 1,
+          slidesToShow: 1, // Strictly 1 video
+          infinite: true,
+          autoplay: true,
+          autoplaySpeed: 5000,
+          breakpoints: [
+            { changePoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } },
+            { changePoint: 768, settings: { slidesToShow: 1, slidesToScroll: 1 } },
+            { changePoint: 1024, settings: { slidesToShow: 1, slidesToScroll: 1 } }
+          ]
+        });
+      }
+    });
+  </script>
 
+  
 <!-- TL;DR -->
 <section class="section">
     <div class="container is-max-desktop">
@@ -389,12 +392,6 @@
     </div>
   </div>
 </footer>
-
-<!-- Statcounter tracking code -->
-  
-<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
-
-    <!-- End of Statcounter Code -->
 
   </body>
   </html>
