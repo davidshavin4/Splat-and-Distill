@@ -100,14 +100,14 @@
 
                   <div class="is-size-5 publication-authors">
                     <!-- TODO: Replace with your institution and conference/journal info -->
-                    <span class="author-block">Hebrew University of Jerusalem<br>ICLR 2026</span>                    
+                    <span class="author-block">Hebrew University of Jerusalem<br><span style="font-size: 2.5rem; font-weight: bold;">ICLR 2026</span></span>                    
                   </div>
 
                   <div class="column has-text-centered">
                     <div class="publication-links">
                          <!-- TODO: Update with your arXiv paper ID -->
                       <span class="link-block">
-                        <a href="https://openreview.net/pdf?id=9fqGBSLBX8" target="_blank"
+                        <a href="https://arxiv.org/abs/2602.06032" target="_blank"
                         class="external-link button is-normal is-rounded is-dark">
                         <span class="icon">
                           <i class="fas fa-file-pdf"></i>
@@ -128,15 +128,16 @@
                     <span>Code</span>
                   </a>
                 </span>
-
-                <!-- TODO: Update with your arXiv paper ID -->
                 <span class="link-block">
-                  <a href="https://openreview.net/forum?id=9fqGBSLBX8" target="_blank"
-                  class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                    <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>OpenReview</span>
+                  <a href="https://medium.com/@davidshavin4/splat-and-distill-augmenting-teachers-with-feed-forward-3d-reconstruction-for-3d-aware-1f2c5e778399" 
+                     target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-medium"></i>
+                    </span>
+                    <span>Medium</span>
+                  </a>
+                </span>
                 </a>
               </span>
             </div>
@@ -155,32 +156,32 @@
           
           <div class="item item-video1">
             <video class="carousel-video" id="video1" controls muted loop playsinline height="100%" 
-                   data-src="static/videos/bicycle_pca.mp4" type="video/mp4">
+                   data-src="static/videos/bicycle_pca_labeled.mp4" type="video/mp4">
             </video>
           </div>
   
           <div class="item item-video2">
             <video class="carousel-video" id="video2" controls muted loop playsinline height="100%" 
-                   data-src="static/videos/dance_pca.mp4" type="video/mp4">
+                   data-src="static/videos/dance_pca_labeled.mp4" type="video/mp4">
             </video>
           </div>
   
           <div class="item item-video3">
             <video class="carousel-video" id="video3" controls muted loop playsinline height="100%" 
-                   data-src="static/videos/dogs_pca.mp4" type="video/mp4">
+                   data-src="static/videos/dogs_pca_labeled.mp4" type="video/mp4">
             </video>
           </div>
   
           <div class="item item-video4">
             <video class="carousel-video" id="video4" controls muted loop playsinline height="100%" 
-                   data-src="static/videos/office_pca.mp4" type="video/mp4">
+                   data-src="static/videos/office_pca_labeled.mp4" type="video/mp4">
             </video>
           </div>
   
           </div>
       </div>
       <p style="margin-top: 15px; text-align: center;">
-        Visualizing PCA components: [ORIGINAL] - [DINOv2] - [OURS]
+        Visualizing features with PCA.
       </p>
     </div>
   </section>
@@ -212,7 +213,9 @@
 <section class="section hero is-light">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
+      <!-- <div class="column is-four-fifths"> -->
+        <div class="column is-full-width">
+
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <!-- TODO: Replace with your paper abstract -->
@@ -335,13 +338,16 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre id="bibtex-code"><code>@article{YourPaperKey2024,
-  title={Coming soon},
-  author={Coming soon},
-  journal={Coming soon},
-  year={Coming soon},
-  url={Coming soon}
-}</code></pre>
+      <pre id="bibtex-code"><code>@inproceedings{shavin2026splat,
+        title={Splat and Distill: Augmenting Teachers with Feed-Forward 3D Reconstruction For 3D-Aware Distillation},
+        author={Shavin, David and Benaim, Sagie},
+        booktitle={International Conference on Learning Representations (ICLR)},
+        year={2026},
+        url={https://arxiv.org/abs/2602.06032},
+        eprint={2602.06032},
+        archivePrefix={arXiv},
+        primaryClass={cs.CV}
+      }</code></pre>
     </div>
 </section>
 <!--End BibTex citation -->
