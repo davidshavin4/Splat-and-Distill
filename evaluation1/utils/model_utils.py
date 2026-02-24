@@ -22,9 +22,7 @@ ADE_STD = np.array([58.395, 57.120, 57.375]) / 255
 model_card = {
     "dinov2_small_timm": "vit_small_patch14_dinov2.lvd142m",
     "dinov2_base_timm": "vit_base_patch14_dinov2.lvd142m",    
-
-    # "dinov2_small_snd": "/sci/labs/sagieb/davidjoseph/mvsplat_orig/experiments/dinov2_vits/08072025-1559/teacher_50000.pth",
-    # "dinov2_base_snd": "/sci/labs/sagieb/davidjoseph/mvsplat_orig/experiments/dinov2_vitb/13072025-1553/teacher_50000.pth",
+    
     "dinov2_small_snd": "https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_small_snd.pth",
     "dinov2_base_snd": "https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_base_snd.pth",
 
