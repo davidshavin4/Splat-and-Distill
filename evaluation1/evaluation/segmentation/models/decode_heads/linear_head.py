@@ -1,0 +1,92 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the Apache License, Version 2.0
+# found in the LICENSE file in the root directory of this source tree.
+
+import torch
+import torch.nn as nn
+
+from ...ops import resize
+from ..builder import HEADS
+from .decode_head import SegmentationBaseDecodeHead
+
+
+@HEADS.register_module()
+class BNHead(SegmentationBaseDecodeHead):
+    """Just a batchnorm."""
+
+    def __init__(
+        self,        
+        # input_transform="resize_concat",
+        # in_index=(0, 1, 2, 3),
+        upsample=1,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        
+        self.input_transform = kwargs.get('input_transform', None)
+        self.in_index = kwargs.get('in_index', None)
+        self.upsample = upsample
+
+        
+
+    def _transform_inputs(self, inputs):
+        """Transform inputs for decoder.
+        Args:
+            inputs (list[Tensor]): List of multi-level img features.
+        Returns:
+            Tensor: The transformed inputs
+        """
+
+        if "concat" in self.input_transform:
+            inputs = [inputs[i] for i in self.in_index]
+            if "resize" in self.input_transform:
+                inputs = [
+                    resize(
+                        input=x,
+                        size=[s * self.upsample for s in inputs[0].shape[2:]],
+                        mode="bilinear",
+                        align_corners=self.align_corners,
+                    )
+                    for x in inputs
+                ]
+            inputs = torch.cat(inputs, dim=1)
+        elif self.input_transform == "multiple_select":
+            inputs = [inputs[i] for i in self.in_index]
+        else:
+            inputs = inputs[self.in_index]
+
+        return inputs
+
+    def _forward_feature(self, inputs, img_metas=None, **kwargs):
+        """Forward function for feature maps before classifying each pixel with
+        ``self.cls_seg`` fc.
+        Args:
+            inputs (list[Tensor]): List of multi-level img features.
+        Returns:
+            feats (Tensor): A tensor of shape (batch_size, self.channels,
+                H, W) which is feature map for last layer of decoder head.
+        """
+        # accept lists (for cls token)
+        inputs = list(inputs)
+        for i, x in enumerate(inputs):
+            if isinstance(x, tuple) and len(x) == 2:
+                x, cls_token = x[0], x[1]
+                cls_dim = cls_token.shape[1] # In the case were we concat features we'll only use the cls of the first model (that's how they did in fit3d choice)
+                if len(x.shape) == 2:
+                    x = x[:, :, None, None]
+                cls_token = cls_token[:, :, None, None].expand_as(x[:,:cls_dim, :, :])
+                inputs[i] = torch.cat((x, cls_token), 1)
+            else:
+                if len(x.shape) == 2:
+                    x = x[:, :, None, None]
+                inputs[i] = x
+        x = self._transform_inputs(inputs)
+        return x
+
+
+    def forward(self, inputs, img_metas=None, **kwargs):
+        """Forward function."""
+        output = self._forward_feature(inputs, img_metas=img_metas, **kwargs)
+        output = self.cls_seg(output)
+        return output

@@ -1,12 +1,12 @@
 # SPLAT AND DISTILL: Augmenting Teachers with Feed-Forward 3D Reconstruction for 3D-Aware Distillation
 
-## ICLR 2026
+**Accepted to ICLR 2026**
 
 [**David Shavin**](https://davidshavin4.github.io/)<sup>1</sup>, [**Sagie Benaim**](https://sagiebenaim.github.io/)<sup>1</sup>
 
 <sup>1</sup>The Hebrew University of Jerusalem
 
-## [Project Page](https://davidshavin4.github.io/Splat-and-Distill/) | [Paper](https://arxiv.org/abs/2602.06032) | [Medium](#)
+[**Project Page**](https://davidshavin4.github.io/Splat-and-Distill/) | [**Paper**](https://arxiv.org/abs/2602.06032) | [**Hugging Face**](https://huggingface.co/papers/2602.06032) | [**Model Weights**](https://huggingface.co/david-shavin/SnD) | [**Medium**](#)
 
 ---
 
@@ -29,10 +29,39 @@
 ## 🛠️ Development Status
 
 - [x] Adding installation documentation
+- [x] Providing pre-trained checkpoints for DINOv2-based aligners
 - [x] Releasing the full training pipeline
-- [ ] Provide instruction for data download
-- [ ] Providing pre-trained checkpoints for DINOv2-based aligners
 - [ ] Adding evaluation code
+- [ ] Provide better instruction for data download
+
+---
+
+## 🏋️ Weights
+
+SnD weights are available on [Hugging Face](https://huggingface.co/david-shavin/SnD).
+
+### Using Pre-trained Weights
+
+Load the weights directly using PyTorch Hub. _Note: we offer two versions for the model weights, w/o blending, depending on the task. See details on model cards._
+
+```python
+import torch
+import timm
+
+# Download weights from Hugging Face
+url = "https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_small_snd.pth"
+state_dict = torch.hub.load_state_dict_from_url(url, map_location='cpu')
+
+# Load into timm model
+model = timm.create_model(
+    "vit_small_patch14_dinov2.lvd142m",
+    pretrained=True,
+    num_classes=0,
+    dynamic_img_size=True,
+    dynamic_img_pad=False,
+)
+model.load_state_dict(state_dict, strict=False)
+```
 
 ---
 
@@ -71,23 +100,23 @@ datasets/
 
 1. **Environment Setup**
 
-   - Follow the environment setup instructions from [MVSplat](https://github.com/donydchen/mvsplat), **but do not download the rasterizer from MVSplat**.
+   - Follow the environment setup instructions from [MVSplat](#), **but do not download the rasterizer from MVSplat**.
    - Instead, download and install the Ludvig rasterizer, which supports feature rendering:
      - [Ludvig Rasterizer](https://github.com/naver/ludvig/tree/main/gaussiansplatting/submodules)
    - **Important:** Before installing, modify the number of embeddings to rasterize (e.g., 384 for DINOv2-Small) in [`apply_weights.cu`](https://github.com/naver/ludvig/blob/main/gaussiansplatting/submodules/diff-gaussian-rasterization/cuda_rasterizer/apply_weights.cu).
 
 2. **Pretrained Models**
-   - Download `re10k.ckpt` from [MVSplat](https://github.com/donydchen/mvsplat) and save it to `checkpoints/`.
-   - Download the backbone pretrained weight from Unimatch and save to `checkpoints/`:
+   - Download `re10k.ckpt` from [MVSplat](#) and save it to `checkpoints/`.
+   - Download the backbone pretrained weight from [Unimatch](https://s3.eu-central-1.amazonaws.com/avg-projects/unimatch/pretrained/gmdepth-scale1-resumeflowthings-scannet-5d9d7964.pth) and save to `checkpoints/`:
      ```sh
      wget 'https://s3.eu-central-1.amazonaws.com/avg-projects/unimatch/pretrained/gmdepth-scale1-resumeflowthings-scannet-5d9d7964.pth' -P checkpoints
      ```
 
 ---
 
-## 🚀 Running the Project
+## 🚀 Training
 
-Example command to start training/evaluation:
+Example command to start training:
 
 ```sh
 python -m src.main +experiment=scannetpp.yaml data_loader.train.batch_size=1 checkpointing.load=checkpoints/re10k.ckpt checkpointing.resume=false model/vit=dinov2s
@@ -95,9 +124,89 @@ python -m src.main +experiment=scannetpp.yaml data_loader.train.batch_size=1 che
 
 ---
 
+## 🔍 Evaluation
+
+We provide two separate evaluation setups, each requiring its own conda environment:
+
+- **Environment 1**: Semantic Segmentation & Depth Estimation
+- **Environment 2**: Surface Normal Estimation & Multi-view Correspondence (coming soon)
+
+---
+
+## Part 1: Semantic Segmentation & Depth Estimation
+
+This section focuses on semantic segmentation and depth estimation evaluation.
+
+### Setup
+
+We follow the environment setup from [FiT3D](https://github.com/Yue-0/FiT3D). Install the required dependencies:
+
+```bash
+# Create conda environment
+conda create -n fit3d python=3.10
+conda activate fit3d
+pip install torch==2.0.0 torchvision==0.15.1 --index-url https://download.pytorch.org/whl/cu118
+cd evaluation1
+pip install -r requirements.txt
+conda install -c "nvidia/label/cuda-11.8.0" cuda-toolkit
+```
+
+### Install mmcv and mmsegmentation
+
+```bash
+cd mmcv
+MMCV_WITH_OPS=1 pip install . --no-build-isolation -v
+cd ../mmsegmentation
+pip install -e . -v
+```
+
+### Environment Variables
+
+Set the following environment variables before running evaluations:
+
+```bash
+# Set library path for CUDA libraries
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$CONDA_PREFIX/targets/x86_64-linux/lib
+
+# Set Python path for mmcv and mmsegmentation
+export PYTHONPATH=$(pwd)/mmcv:$(pwd)/mmsegmentation:$PYTHONPATH
+```
+
+### Running Evaluations
+
+```bash
+# Move back to evaluation1 directory
+cd ..
+```
+
+#### Semantic Segmentation (ScanNet++)
+
+```bash
+python linear_evaluate_segmentation.py \
+    --backbone-type dinov2_small_snd \
+    evaluation/baseline_configs/vits_scannetpp_sem_linear_config.py \
+    --work-dir work_dirs/baseline_segmentation_eval/scannetpp/dinov2s \
+    --eval_baseline
+```
+
+#### Depth Estimation (ScanNet++)
+
+```bash
+python linear_evaluate_depth.py \
+    --backbone-type dinov2_small_snd \
+    evaluation/baseline_configs/vits_scannetpp_depth_linear_config.py \
+    --work-dir work_dirs/baseline_depth_eval/scannetpp/dinov2s \
+    --eval_baseline
+```
+
+---
+
+## Part 2: surface normal estimation & mutliview correspondence (Coming soon..)
+
 ## 🔗 Useful Links
 
 - [Fit3D](https://github.com/ywyue/FiT3D/tree/main)
+- [Probe3D](https://github.com/mbanani/probe3d/tree/main)
 - [MVSplat](https://github.com/donydchen/mvsplat)
 - [Ludvig Rasterizer](https://github.com/naver/ludvig/tree/main/gaussiansplatting/submodules)
 - [ScanNet++](https://kaldir.vc.in.tum.de/scannetpp/)
@@ -108,7 +217,7 @@ python -m src.main +experiment=scannetpp.yaml data_loader.train.batch_size=1 che
 
 ## 🙌 Acknowledgement
 
-This repository is based on [Fit3D](https://github.com/ywyue/FiT3D/tree/main) and [MVSplat](https://github.com/donydchen/mvsplat). We would like to thank the authors of these works for publicly releasing their code.
+This repository is based on [MVSplat](https://github.com/donydchen/mvsplat), [Fit3D](https://github.com/ywyue/FiT3D/tree/main), and [Probe3D](https://github.com/mbanani/probe3d/tree/main). We would like to thank the authors of these works for publicly releasing their code.
 
 ---
 
@@ -117,14 +226,10 @@ This repository is based on [Fit3D](https://github.com/ywyue/FiT3D/tree/main) an
 If you find this work useful, please consider citing:
 
 ```bibtex
-@inproceedings{shavin2026splat,
+@article{shavin2026splat,
   title={Splat and Distill: Augmenting Teachers with Feed-Forward 3D Reconstruction For 3D-Aware Distillation},
   author={Shavin, David and Benaim, Sagie},
-  booktitle={International Conference on Learning Representations (ICLR)},
-  year={2026},
-  url={https://arxiv.org/abs/2602.06032},
-  eprint={2602.06032},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+  journal={arXiv preprint arXiv:2602.06032},
+  year={2026}
 }
 ```
