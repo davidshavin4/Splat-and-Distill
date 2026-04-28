@@ -1,4 +1,0 @@
-_target_: evals.models.probes.SurfaceNormalHead
-uncertainty_aware: True
-head_type: linear
-kernel_size: 1

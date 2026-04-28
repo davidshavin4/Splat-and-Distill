@@ -1,6 +1,0 @@
-_target_: evals.models.dino.DINO
-dino_name: dinov2
-load_snd: False
-model_name: vitb14
-output: dense-cls
-layer: -1
