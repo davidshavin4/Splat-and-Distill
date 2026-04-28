@@ -57,8 +57,6 @@ def main(cfg: DictConfig):
     err_2d = []
     R_gt = []
     for i in tqdm(range(len(dataset))):
-        if i>10:
-            break
         instance = dataset.__getitem__(i)
         rgbs = torch.stack((instance["rgb_0"], instance["rgb_1"]), dim=0)
         deps = torch.stack((instance["depth_0"], instance["depth_1"]), dim=0)

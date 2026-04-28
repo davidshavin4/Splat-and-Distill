@@ -1,38 +1,13 @@
 # SPLAT AND DISTILL: Augmenting Teachers with Feed-Forward 3D Reconstruction for 3D-Aware Distillation
 
-**Accepted to ICLR 2026**
+## Overview
 
-[**David Shavin**](https://davidshavin4.github.io/)<sup>1</sup>, [**Sagie Benaim**](https://sagiebenaim.github.io/)<sup>1</sup>
-
-<sup>1</sup>The Hebrew University of Jerusalem
-
-[**Project Page**](https://davidshavin4.github.io/Splat-and-Distill/) | [**Paper**](https://arxiv.org/abs/2602.06032) | [**Hugging Face**](https://huggingface.co/papers/2602.06032) | [**Model Weights**](https://huggingface.co/david-shavin/SnD) | [**Medium**](#)
+This project implements 3D-aware distillation using feed-forward 3D reconstruction. The dataset structure and setup are inspired by Fit3D and MVSplat, with modifications for segmentation and feature rendering.
 
 ---
 
-<p align="center">
-  <img src="assets/teaser.jpg" alt="Splat and Distill Teaser" width="100%">
-</p>
+# TODO: Add git install part + cd splat-and-distill
 
----
-
-## 📌 Overview
-
-**Splat and Distill (SnD)** is a fine-tuning pipeline that enhances 3D awareness in Vision Foundation Models (VFMs).
-
----
-
-> 🚧 **Work in Progress:** This repository is under active development. The current codebase is a partial release. We are working on cleaning and documenting the remaining modules, which will be uploaded shortly.
-
----
-
-## 🛠️ Development Status
-
-- [x] Adding installation documentation
-- [x] Providing pre-trained checkpoints for DINOv2-based aligners
-- [x] Releasing the full training pipeline
-- [ ] Adding evaluation code
-- [ ] Provide better instruction for data download
 
 ---
 
@@ -42,7 +17,7 @@ SnD weights are available on [Hugging Face](https://huggingface.co/david-shavin/
 
 ### Using Pre-trained Weights
 
-Load the weights directly using PyTorch Hub. _Note: we offer two versions for the model weights, w/o blending, depending on the task. See details on model cards._
+Load the weights directly using PyTorch Hub:
 
 ```python
 import torch
@@ -63,9 +38,19 @@ model = timm.create_model(
 model.load_state_dict(state_dict, strict=False)
 ```
 
----
+### Available Models
 
-## 📁 Dataset Structure
+| Model | URL |
+|-------|-----|
+| DINOv2-Small + SnD | `https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_small_snd.pth` |
+| DINOv2-Base + SnD | `https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_base_snd.pth` |
+
+For the base model, use the same code but replace:
+- URL: `dinov2_small_snd.pth` → `dinov2_base_snd.pth`
+- Model name: `vit_small_patch14_dinov2.lvd142m` → `vit_base_patch14_dinov2.lvd142m`
+
+---
+## Dataset Structure
 
 Create the following directory structure under your working directory:
 
@@ -92,14 +77,13 @@ datasets/
         └── ...
 ```
 
-- Segmentation masks should match image filenames, extracted with [SAM](https://github.com/facebookresearch/segment-anything) or downloaded from [ScanNet++](https://kaldir.vc.in.tum.de/scannetpp/).
+- Segmentation masks should match image filenames, extracted with [SAM](#) or downloaded from [ScanNet++](#).
 
 ---
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
 1. **Environment Setup**
-
    - Follow the environment setup instructions from [MVSplat](#), **but do not download the rasterizer from MVSplat**.
    - Instead, download and install the Ludvig rasterizer, which supports feature rendering:
      - [Ludvig Rasterizer](https://github.com/naver/ludvig/tree/main/gaussiansplatting/submodules)
@@ -114,7 +98,7 @@ datasets/
 
 ---
 
-## 🚀 Training
+## Training
 
 Example command to start training:
 
@@ -124,17 +108,9 @@ python -m src.main +experiment=scannetpp.yaml data_loader.train.batch_size=1 che
 
 ---
 
-## 🔍 Evaluation
-
-We provide two separate evaluation setups, each requiring its own conda environment:
-
-- **Environment 1**: Semantic Segmentation & Depth Estimation
-- **Environment 2**: Surface Normal Estimation & Multi-view Correspondence (coming soon)
-
----
-
+# Evaluation
+We provide two evaluation setups for different downstream tasks. 
 ## Part 1: Semantic Segmentation & Depth Estimation
-
 This section focuses on semantic segmentation and depth estimation evaluation.
 
 ### Setup
@@ -151,15 +127,14 @@ pip install -r requirements.txt
 conda install -c "nvidia/label/cuda-11.8.0" cuda-toolkit
 ```
 
-### Install mmcv and mmsegmentation
 
+### Install mmcv and mmsegmentation
 ```bash
 cd mmcv
 MMCV_WITH_OPS=1 pip install . --no-build-isolation -v
 cd ../mmsegmentation
 pip install -e . -v
 ```
-
 ### Environment Variables
 
 Set the following environment variables before running evaluations:
@@ -178,9 +153,7 @@ export PYTHONPATH=$(pwd)/mmcv:$(pwd)/mmsegmentation:$PYTHONPATH
 # Move back to evaluation1 directory
 cd ..
 ```
-
 #### Semantic Segmentation (ScanNet++)
-
 ```bash
 python linear_evaluate_segmentation.py \
     --backbone-type dinov2_small_snd \
@@ -188,9 +161,7 @@ python linear_evaluate_segmentation.py \
     --work-dir work_dirs/baseline_segmentation_eval/scannetpp/dinov2s \
     --eval_baseline
 ```
-
 #### Depth Estimation (ScanNet++)
-
 ```bash
 python linear_evaluate_depth.py \
     --backbone-type dinov2_small_snd \
@@ -198,13 +169,76 @@ python linear_evaluate_depth.py \
     --work-dir work_dirs/baseline_depth_eval/scannetpp/dinov2s \
     --eval_baseline
 ```
+---
+## Part 2: Surface Normal Estimation & Multiview Correspondence
 
+We follow the environment setup from [Probe3D](https://github.com/mbanani/probe3d/tree/main). 
+```bash
+# Move to evaluation2 directory
+cd ../evaluation2
+```
+Install the required dependencies:
+```Base
+conda create -n probe3d python=3.9 --yes
+conda activate probe3d
+
+# 2. Install NumPy 1.x FIRST to "pin" it in the conda solver
+conda install numpy=1.26.4 -c conda-forge --yes
+
+conda install pytorch=2.2.1 torchvision=0.17.1 pytorch-cuda=12.1 -c pytorch -c nvidia 
+conda install -c pytorch -c nvidia faiss-gpu=1.8.0
+conda install -c conda-forge nb_conda_kernels=2.3.1
+
+pip install -r requirements.txt
+python setup.py develop
+
+pip install protobuf==3.20.3    # weird dependency with datasets and google's api
+pre-commit install              # install pre-commit
+```
+<!-- ```Base
+# 1. Create and activate the environment
+conda create -n probe3d python=3.9 --yes
+conda activate probe3d
+
+# 2. Install PyTorch, Torchvision, and CUDA 11.8 specifically
+# We use version 2.1.2/0.16.2 as they are the most stable pair for 11.8
+conda install pytorch=2.1.2 torchvision=0.16.2 pytorch-cuda=11.8 -c pytorch -c nvidia --yes
+
+# 3. Install GPU-enabled Faiss for 11.8
+conda install -c pytorch -c nvidia faiss-gpu=1.8.0 --yes
+
+# 4. Install Jupyter kernels and remaining dependencies
+conda install -c conda-forge nb_conda_kernels=2.3.1 --yes
+
+# 5. Install requirements and link the local 'evals' package
+pip install -r requirements.txt
+python setup.py develop
+
+pip install protobuf==3.20.3    # weird dependency with datasets and google's api
+pre-commit install              # install pre-commit
+``` -->
+
+
+### Running Evaluations
+
+#### To run Multiview Correspondence (ScanNet) download the scannet_test_1500 from [Probe3D](https://github.com/mbanani/probe3d/tree/main). 
+#### Run:
+
+```bash
+python evaluate_scannet_correspondence.py backbone.load_snd=True
+```
+
+#### Surface Normal Estimation (Coming Soon)
+<!-- 
+```bash
+python train_snorm.py backbone=dino_b16 +backbone.return_multilayer=True
+
+``` -->
 ---
 
-## Part 2: surface normal estimation & mutliview correspondence (Coming soon..)
 
-## 🔗 Useful Links
 
+## Useful Links
 - [Fit3D](https://github.com/ywyue/FiT3D/tree/main)
 - [Probe3D](https://github.com/mbanani/probe3d/tree/main)
 - [MVSplat](https://github.com/donydchen/mvsplat)
@@ -212,24 +246,3 @@ python linear_evaluate_depth.py \
 - [ScanNet++](https://kaldir.vc.in.tum.de/scannetpp/)
 - [SAM](https://github.com/facebookresearch/segment-anything)
 - [Unimatch Pretrained Weights](https://s3.eu-central-1.amazonaws.com/avg-projects/unimatch/pretrained/gmdepth-scale1-resumeflowthings-scannet-5d9d7964.pth)
-
----
-
-## 🙌 Acknowledgement
-
-This repository is based on [MVSplat](https://github.com/donydchen/mvsplat), [Fit3D](https://github.com/ywyue/FiT3D/tree/main), and [Probe3D](https://github.com/mbanani/probe3d/tree/main). We would like to thank the authors of these works for publicly releasing their code.
-
----
-
-## Citation
-
-If you find this work useful, please consider citing:
-
-```bibtex
-@article{shavin2026splat,
-  title={Splat and Distill: Augmenting Teachers with Feed-Forward 3D Reconstruction For 3D-Aware Distillation},
-  author={Shavin, David and Benaim, Sagie},
-  journal={arXiv preprint arXiv:2602.06032},
-  year={2026}
-}
-```
