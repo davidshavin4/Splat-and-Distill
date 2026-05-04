@@ -287,7 +287,7 @@ class DPTHead(DepthBaseDecodeHead):
         readout_type="ignore",
         patch_size=16,
         expand_channels=False,
-        cls_factor=1., # Added by David, in baseline it's 2 because cls_token channels == embed_dims channels, but in concat it's 1.5
+        cls_factor=1., 
         **kwargs
     ):
         super(DPTHead, self).__init__(**kwargs)

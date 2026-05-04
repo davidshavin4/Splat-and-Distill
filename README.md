@@ -1,13 +1,27 @@
 # SPLAT AND DISTILL: Augmenting Teachers with Feed-Forward 3D Reconstruction for 3D-Aware Distillation
 
-## Overview
+## ICLR 2026
 
-This project implements 3D-aware distillation using feed-forward 3D reconstruction. The dataset structure and setup are inspired by Fit3D and MVSplat, with modifications for segmentation and feature rendering.
+[**David Shavin**](https://davidshavin4.github.io/)<sup>1</sup>, [**Sagie Benaim**](https://sagiebenaim.github.io/)<sup>1</sup>
 
----
+<sup>1</sup>The Hebrew University of Jerusalem
 
-# TODO: Add git install part + cd splat-and-distill
+## [**Project Page**](https://davidshavin4.github.io/Splat-and-Distill/) | [**Paper**](https://arxiv.org/abs/2602.06032) | [**Hugging Face**](https://huggingface.co/papers/2602.06032) | [**Model Weights**](https://huggingface.co/david-shavin/SnD) | [**Medium**](#)
 
+## Setup Instructions
+
+1. **Environment Setup**
+   - Follow the environment setup instructions from [MVSplat](#), **but do not download the rasterizer from MVSplat**.
+   - Instead, download and install the Ludvig rasterizer, which supports feature rendering:
+     - [Ludvig Rasterizer](https://github.com/naver/ludvig/tree/main/gaussiansplatting/submodules)
+   - **Important:** Before installing, modify the number of embeddings to rasterize (e.g., 384 for DINOv2-Small) in [`apply_weights.cu`](https://github.com/naver/ludvig/blob/main/gaussiansplatting/submodules/diff-gaussian-rasterization/cuda_rasterizer/apply_weights.cu).
+
+2. **Pretrained Models**
+   - Download `re10k.ckpt` from [MVSplat](#) and save it to `checkpoints/`.
+   - Download the backbone pretrained weight from [Unimatch](https://s3.eu-central-1.amazonaws.com/avg-projects/unimatch/pretrained/gmdepth-scale1-resumeflowthings-scannet-5d9d7964.pth) and save to `checkpoints/`:
+     ```sh
+     wget 'https://s3.eu-central-1.amazonaws.com/avg-projects/unimatch/pretrained/gmdepth-scale1-resumeflowthings-scannet-5d9d7964.pth' -P checkpoints
+     ```
 
 ---
 
@@ -38,18 +52,24 @@ model = timm.create_model(
 model.load_state_dict(state_dict, strict=False)
 ```
 
-### Available Models
+#### Available Models
 
-| Model | URL |
-|-------|-----|
+| Model              | URL                                                                         |
+| ------------------ | --------------------------------------------------------------------------- |
 | DINOv2-Small + SnD | `https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_small_snd.pth` |
-| DINOv2-Base + SnD | `https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_base_snd.pth` |
+| DINOv2-Base + SnD  | `https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_base_snd.pth`  |
 
 For the base model, use the same code but replace:
+
 - URL: `dinov2_small_snd.pth` → `dinov2_base_snd.pth`
 - Model name: `vit_small_patch14_dinov2.lvd142m` → `vit_base_patch14_dinov2.lvd142m`
 
 ---
+
+## Data
+
+For training data we used ScanNet++ as in [FiT3D](https://github.com/Yue-0/FiT3D)
+
 ## Dataset Structure
 
 Create the following directory structure under your working directory:
@@ -81,23 +101,6 @@ datasets/
 
 ---
 
-## Setup Instructions
-
-1. **Environment Setup**
-   - Follow the environment setup instructions from [MVSplat](#), **but do not download the rasterizer from MVSplat**.
-   - Instead, download and install the Ludvig rasterizer, which supports feature rendering:
-     - [Ludvig Rasterizer](https://github.com/naver/ludvig/tree/main/gaussiansplatting/submodules)
-   - **Important:** Before installing, modify the number of embeddings to rasterize (e.g., 384 for DINOv2-Small) in [`apply_weights.cu`](https://github.com/naver/ludvig/blob/main/gaussiansplatting/submodules/diff-gaussian-rasterization/cuda_rasterizer/apply_weights.cu).
-
-2. **Pretrained Models**
-   - Download `re10k.ckpt` from [MVSplat](#) and save it to `checkpoints/`.
-   - Download the backbone pretrained weight from [Unimatch](https://s3.eu-central-1.amazonaws.com/avg-projects/unimatch/pretrained/gmdepth-scale1-resumeflowthings-scannet-5d9d7964.pth) and save to `checkpoints/`:
-     ```sh
-     wget 'https://s3.eu-central-1.amazonaws.com/avg-projects/unimatch/pretrained/gmdepth-scale1-resumeflowthings-scannet-5d9d7964.pth' -P checkpoints
-     ```
-
----
-
 ## Training
 
 Example command to start training:
@@ -109,11 +112,18 @@ python -m src.main +experiment=scannetpp.yaml data_loader.train.batch_size=1 che
 ---
 
 # Evaluation
-We provide two evaluation setups for different downstream tasks. 
+
+We provide two evaluation setups for different downstream tasks.
+
 ## Part 1: Semantic Segmentation & Depth Estimation
+
 This section focuses on semantic segmentation and depth estimation evaluation.
 
-### Setup
+#### Data
+
+For ScanNet++ data, we used [FiT3D](https://github.com/Yue-0/FiT3D).
+
+#### Setup
 
 We follow the environment setup from [FiT3D](https://github.com/Yue-0/FiT3D). Install the required dependencies:
 
@@ -127,15 +137,16 @@ pip install -r requirements.txt
 conda install -c "nvidia/label/cuda-11.8.0" cuda-toolkit
 ```
 
+#### Install mmcv and mmsegmentation
 
-### Install mmcv and mmsegmentation
 ```bash
 cd mmcv
 MMCV_WITH_OPS=1 pip install . --no-build-isolation -v
 cd ../mmsegmentation
 pip install -e . -v
 ```
-### Environment Variables
+
+#### Environment Variables
 
 Set the following environment variables before running evaluations:
 
@@ -147,13 +158,15 @@ export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$CONDA_PREFIX/targets/x86_64-linux/lib
 export PYTHONPATH=$(pwd)/mmcv:$(pwd)/mmsegmentation:$PYTHONPATH
 ```
 
-### Running Evaluations
+#### Running Evaluations
 
 ```bash
 # Move back to evaluation1 directory
 cd ..
 ```
+
 #### Semantic Segmentation (ScanNet++)
+
 ```bash
 python linear_evaluate_segmentation.py \
     --backbone-type dinov2_small_snd \
@@ -161,7 +174,9 @@ python linear_evaluate_segmentation.py \
     --work-dir work_dirs/baseline_segmentation_eval/scannetpp/dinov2s \
     --eval_baseline
 ```
+
 #### Depth Estimation (ScanNet++)
+
 ```bash
 python linear_evaluate_depth.py \
     --backbone-type dinov2_small_snd \
@@ -169,15 +184,20 @@ python linear_evaluate_depth.py \
     --work-dir work_dirs/baseline_depth_eval/scannetpp/dinov2s \
     --eval_baseline
 ```
+
 ---
+
 ## Part 2: Surface Normal Estimation & Multiview Correspondence
 
-We follow the environment setup from [Probe3D](https://github.com/mbanani/probe3d/tree/main). 
+We follow the environment setup from [Probe3D](https://github.com/mbanani/probe3d/tree/main).
+
 ```bash
 # Move to evaluation2 directory
 cd ../evaluation2
 ```
+
 Install the required dependencies:
+
 ```Base
 conda create -n probe3d python=3.9 --yes
 conda activate probe3d
@@ -185,7 +205,7 @@ conda activate probe3d
 # 2. Install NumPy 1.x FIRST to "pin" it in the conda solver
 conda install numpy=1.26.4 -c conda-forge --yes
 
-conda install pytorch=2.2.1 torchvision=0.17.1 pytorch-cuda=12.1 -c pytorch -c nvidia 
+conda install pytorch=2.2.1 torchvision=0.17.1 pytorch-cuda=12.1 -c pytorch -c nvidia
 conda install -c pytorch -c nvidia faiss-gpu=1.8.0
 conda install -c conda-forge nb_conda_kernels=2.3.1
 
@@ -195,6 +215,7 @@ python setup.py develop
 pip install protobuf==3.20.3    # weird dependency with datasets and google's api
 pre-commit install              # install pre-commit
 ```
+
 <!-- ```Base
 # 1. Create and activate the environment
 conda create -n probe3d python=3.9 --yes
@@ -218,27 +239,28 @@ pip install protobuf==3.20.3    # weird dependency with datasets and google's ap
 pre-commit install              # install pre-commit
 ``` -->
 
-
 ### Running Evaluations
 
-#### To run Multiview Correspondence (ScanNet) download the scannet_test_1500 from [Probe3D](https://github.com/mbanani/probe3d/tree/main). 
-#### Run:
+#### Follow [Probe3D](https://github.com/mbanani/probe3d/tree/main) for data download.
+
+### Run:
+
+#### Multiview Correspondence (ScanNet)
 
 ```bash
-python evaluate_scannet_correspondence.py backbone.load_snd=True
+python evaluate_scannet_correspondence.py backbone.load_snd=without_blending
 ```
 
-#### Surface Normal Estimation (Coming Soon)
-<!-- 
-```bash
-python train_snorm.py backbone=dino_b16 +backbone.return_multilayer=True
+#### Surface Normal Estimation (NYUv2)
 
-``` -->
+```bash
+python train_snorm.py backbone.load_snd=with_blending
+```
+
 ---
 
-
-
 ## Useful Links
+
 - [Fit3D](https://github.com/ywyue/FiT3D/tree/main)
 - [Probe3D](https://github.com/mbanani/probe3d/tree/main)
 - [MVSplat](https://github.com/donydchen/mvsplat)
@@ -246,3 +268,16 @@ python train_snorm.py backbone=dino_b16 +backbone.return_multilayer=True
 - [ScanNet++](https://kaldir.vc.in.tum.de/scannetpp/)
 - [SAM](https://github.com/facebookresearch/segment-anything)
 - [Unimatch Pretrained Weights](https://s3.eu-central-1.amazonaws.com/avg-projects/unimatch/pretrained/gmdepth-scale1-resumeflowthings-scannet-5d9d7964.pth)
+
+## Citation
+
+If you find our code or paper useful, please cite:
+
+```bibtex
+@inproceedings{shavin2026splat,
+  title={{Splat and Distill: Augmenting Teachers with Feed-Forward 3D Reconstruction For 3D-Aware Distillation}},
+  author={Shavin, David and Benaim, Sagie},
+  booktitle={International Conference on Learning Representations (ICLR)},
+  year={2026}
+}
+```

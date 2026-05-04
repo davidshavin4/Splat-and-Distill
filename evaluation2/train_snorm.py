@@ -115,9 +115,11 @@ def train(
 
         if rank == 0 and valid_loader is not None:
             valid_loss, valid_metrics = validate(model, probe, valid_loader)
-            logger.info(f"Final valid loss       | {valid_loss:.4f}")
+            logger.info(f"Epoch {ep + 1:3d} valid loss | {valid_loss:.4f}")
             for metric in valid_metrics:
-                logger.info(f"Final valid {metric:10s} | {valid_metrics[metric]:.4f}")
+                logger.info(
+                    f"Epoch {ep + 1:3d} valid {metric:10s} | {valid_metrics[metric]:.4f}"
+                )
 
 
 def validate(model, probe, loader, verbose=True, aggregate=True):
@@ -172,7 +174,7 @@ def train_model(rank, world_size, cfg):
 
     # setup experiment name
     # === job info
-    timestamp = datetime.now().strftime("%d%m%Y-%H%M")
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     train_dset = trainval_loader.dataset.name
     test_dset = test_loader.dataset.name
     model_info = [
@@ -184,6 +186,7 @@ def train_model(rank, world_size, cfg):
     probe_info = [f"{probe.name:25s}"]
     batch_size = cfg.batch_size * cfg.system.num_gpus
     train_info = [
+        f"with_snd={cfg.backbone.load_snd}",
         f"{cfg.optimizer.n_epochs:3d}",
         f"{cfg.optimizer.warmup_epochs:4.2f}",
         f"{cfg.optimizer.probe_lr:4.2e}",
@@ -192,10 +195,10 @@ def train_model(rank, world_size, cfg):
         f"{train_dset:10s}",
         f"{test_dset:10s}",
     ]
-    # define exp_name
-    exp_name = "_".join([timestamp] + model_info + probe_info + train_info)
-    exp_name = f"{exp_name}_{cfg.note}" if cfg.note != "" else exp_name
-    exp_name = exp_name.replace(" ", "")  # remove spaces
+    # define exp_name - use only timestamp
+    exp_name = timestamp
+    if cfg.note != "":
+        exp_name = f"{exp_name}_{cfg.note}".replace(" ", "")
 
     # ===== SETUP LOGGING =====
     if rank == 0:
@@ -203,6 +206,15 @@ def train_model(rank, world_size, cfg):
         exp_path.mkdir(parents=True, exist_ok=True)
         logger.add(exp_path / "training.log")
         logger.info(f"Config: \n {OmegaConf.to_yaml(cfg)}")
+        
+        # Save train_info to file
+        train_info_str = "\n".join([
+            f"Model: {', '.join(model_info)}",
+            f"Probe: {', '.join(probe_info)}",
+            f"Training: {', '.join(train_info)}",
+        ])
+        with open(exp_path / "train_info.txt", "w") as f:
+            f.write(train_info_str)
 
     # move to cuda
     model = model.to(rank)
@@ -247,7 +259,7 @@ def train_model(rank, world_size, cfg):
         detach_model=(cfg.optimizer.model_lr == 0),
         rank=rank,
         world_size=world_size,
-        # valid_loader=test_loader,
+        valid_loader=test_loader,
     )
 
     if rank == 0:
@@ -272,8 +284,8 @@ def train_model(rank, world_size, cfg):
         ckpt_path = exp_path / "ckpt.pth"
         checkpoint = {
             "cfg": cfg,
-            "model": model.module.state_dict(),
-            "probe": probe.module.state_dict(),
+            "model": model.state_dict(),
+            "probe": probe.state_dict(),
         }
         torch.save(checkpoint, ckpt_path)
         logger.info(f"Saved checkpoint at {ckpt_path}")

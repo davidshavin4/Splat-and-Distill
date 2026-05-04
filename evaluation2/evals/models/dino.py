@@ -5,8 +5,11 @@ import torch
 import torch.nn.functional as F
 
 snd_checkpoints = {
-    "dinov2_vits14": "https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_small_snd_no_blending.pth",
-    "dinov2_vitb14": "https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_base_snd_no_blending.pth",    
+    "dinov2_vits14_without_blending": "https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_small_snd_no_blending.pth",
+    "dinov2_vitb14_without_blending": "https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_base_snd_no_blending.pth",    
+
+    "dinov2_vits14_with_blending": "https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_small_snd.pth",
+    "dinov2_vitb14_with_blending": "https://huggingface.co/david-shavin/SnD/resolve/main/dinov2_base_snd.pth",
 }
 
 class DINO(torch.nn.Module):
@@ -34,10 +37,10 @@ class DINO(torch.nn.Module):
         self.model_name = dino_name
         self.checkpoint_name = f"{dino_name}_{model_name}"
         dino_vit = torch.hub.load(f"facebookresearch/{dino_name}", self.checkpoint_name)
-        if load_snd:
-            ckpt_path = snd_checkpoints[self.checkpoint_name]
+        if load_snd=="with_blending" or load_snd=="without_blending":
+            ckpt_path = snd_checkpoints[self.checkpoint_name + "_" + load_snd]
             fine_ckpt = torch.hub.load_state_dict_from_url(ckpt_path, map_location='cpu')
-            dino_vit.load_state_dict(fine_ckpt, strict=False)
+            dino_vit.load_state_dict(fine_ckpt, strict=False)        
         
         self.vit = dino_vit.eval().to(torch.float32)
         self.has_registers = "_reg" in model_name
